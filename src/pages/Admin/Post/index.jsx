@@ -88,7 +88,7 @@ const onChange = (pagination, filters, sorter, extra) => {
 };
 
 
-function Editor() {
+function PostAdmin() {
     return (
         <>
             <Table columns={columns} dataSource={data} onChange={onChange} />;
@@ -97,4 +97,4 @@ function Editor() {
 } 
 
 
-export default Editor
+export default PostAdmin

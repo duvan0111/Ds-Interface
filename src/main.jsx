@@ -4,6 +4,7 @@ import App from './App.jsx'
 import './index.css'
 import { BrowserRouter } from 'react-router-dom'
 import { ConfigProvider } from 'antd'
+import { HomeProvider } from './utils/context/index.jsx'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
@@ -19,7 +20,9 @@ ReactDOM.createRoot(document.getElementById('root')).render(
               },
           }}
       >
-        <App/>
+        <HomeProvider>
+          <App/>
+        </HomeProvider>
       </ConfigProvider>
         </BrowserRouter>
   </React.StrictMode>,
