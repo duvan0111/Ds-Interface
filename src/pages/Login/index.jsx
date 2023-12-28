@@ -1,34 +1,67 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Checkbox, Form, Input } from 'antd';
+import authService from '../../services/authService';
+import notificationService from '../../services/notificationService';
+import { useNavigate } from 'react-router-dom';
+import localstorageService, { UTILS_APP } from '../../services/localstorageService';
 
 
 const Login = () => {
+  const [loader, setLoader] = useState(false)
+  const navigate = useNavigate()  
+
   const onFinish = (values) => {
-    console.log('Received values of form: ', values);
+    setLoader(true);
+
+    authService.login(values)
+    .then((res) => {
+        console.log(res)
+        const { data } = res;
+        
+        localstorageService.set(UTILS_APP.TOKEN, data.token);
+        localstorageService.set(UTILS_APP.USER, data.userId);
+        
+        navigate('/admin')
+    })
+    .catch((err) => {
+        try {
+            notificationService.notifyError(err.response.data.message);
+        } catch (error) {
+            notificationService.notifyError("Une erreur s'est produite");
+        }
+    })
+    .finally(() => {
+        setLoader(false);
+    });
   };
+
   return (
     <>
         <div className='flex justify-center items-center h-screen'>
             <div>
                 <Form
                     name="normal_login"
-                    className="login-form"
+                    labelCol={{ span: 8 }}
+                    wrapperCol={{ span: 16 }}
+                    style={{ minWidth: 600}}
+                    className="login-form "
                     initialValues={{
                         remember: true,
                     }}
                     onFinish={onFinish}
                 >
                     <Form.Item
-                        name="username"
+                        name="email"
                         rules={[
                         {
                             required: true,
-                            message: 'Please input your Username!',
+                            message: 'Please input your email!',
+                            type: 'email'
                         },
                         ]}
                     >
-                        <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Username" />
+                        <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Email" />
                     </Form.Item>
                     <Form.Item
                         name="password"
@@ -39,9 +72,9 @@ const Login = () => {
                         },
                         ]}
                     >
-                        <Input
+                        <Input.Password
                         prefix={<LockOutlined className="site-form-item-icon" />}
-                        type="password"
+                        // type="password"
                         placeholder="Password"
                         />
                     </Form.Item>
@@ -56,10 +89,14 @@ const Login = () => {
                     </Form.Item>
 
                     <Form.Item>
-                        <Button type="primary" htmlType="submit" className="login-form-button">
-                        Log in
+                        <Button 
+                            type="primary" 
+                            htmlType="submit" 
+                            className="login-form-button bg-sky-600" 
+                            loading={loader}>
+                            Log in
                         </Button>
-                        Or <a href="">register now!</a>
+                        {/* Or <a href="">register now!</a> */}
                     </Form.Item>
                 </Form>
             </div>

@@ -7,6 +7,7 @@ import LayoutAdmin from "./layout/Admin"
 import Dashboard from "./pages/Admin/Dashboard"
 import PostAdmin from "./pages/Admin/Post"
 import Login from "./pages/Login"
+import Editor from "./pages/Admin/Editor"
 
 function App() {
 
@@ -20,6 +21,7 @@ function App() {
       <Route element={<LayoutAdmin />}>
         <Route path="/admin" element={<Dashboard />}/>
         <Route path="/admin/post" element={<PostAdmin />}/>
+        <Route path="/admin/editor" element={<Editor />}/>
       </Route>
       <Route path="/login" element={<Login />}/>
     </Routes>

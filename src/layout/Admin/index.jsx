@@ -1,45 +1,58 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   UploadOutlined,
   UserOutlined,
   VideoCameraOutlined,
+  LogoutOutlined
 } from '@ant-design/icons';
 import { Layout, Menu, Button, theme } from 'antd';
-import { NavLink, Outlet } from 'react-router-dom';
+import { NavLink, Outlet, useNavigate } from 'react-router-dom';
+import localstorageService, { UTILS_APP } from '../../services/localstorageService';
 const { Header, Sider, Content, Footer } = Layout;
 
 
 function LayoutAdmin() {
     const [collapsed, setCollapsed] = useState(false);
+    const navigate = useNavigate()    
+    const [user, setUser] = useState(null)
+
     const {
       token: { colorBgContainer, borderRadiusLG },
     } = theme.useToken();
+    
+    useEffect(() => {
+      const user = localstorageService.get(UTILS_APP.USER)
+      if(!user){
+          navigate('/login')
+      }
+      setUser(user)
+  }, []);
 
     return (
-        <Layout className='h-screen'>
+        <Layout className='min-h-screen'>
           <Sider trigger={null} collapsible collapsed={collapsed}>
             <div className="demo-logo-vertical" />
                 <Menu
                 theme="dark"
                 mode="inline"
-                defaultSelectedKeys={['1']}
+                // defaultSelectedKeys={['1']}
                 items={[
                     {
                     key: '1',
-                    icon: <UserOutlined />,
+                    icon: <VideoCameraOutlined />,
                     label: <NavLink to={'/admin/'}>Dashboard</NavLink>,
                     },
                     {
                     key: '2',
-                    icon: <VideoCameraOutlined />,
-                    label: 'Auteurs',
+                    icon: <UserOutlined />,
+                    label: <NavLink to={'/admin/editor'}>Editeurs</NavLink>,
                     },
                     {
                     key: '3',
                     icon: <UploadOutlined />,
-                    label: <NavLink to={'/admin/post'}>Article</NavLink>,
+                    label: <NavLink to={'/admin/post'}>Articles</NavLink>,
                     },
                 ]}
                 />
@@ -50,6 +63,7 @@ function LayoutAdmin() {
                 padding: 0,
                 background: colorBgContainer,
               }}
+              className={'flex justify-between'}
             >
               <Button
                 type="text"
@@ -61,6 +75,19 @@ function LayoutAdmin() {
                   height: 64,
                 }}
               />
+              <Button
+                type='text'
+                icon={<LogoutOutlined className="text-danger"/>}
+                onClick={() => {
+                  localstorageService.clear(UTILS_APP.USER);
+                  localstorageService.clear(UTILS_APP.TOKEN);
+                  navigate("/login");
+                }}
+                className={'text-red-600 mt-6'}
+              > 
+                Se déconnecter
+              </Button>
+
             </Header>
             <Content
               style={{

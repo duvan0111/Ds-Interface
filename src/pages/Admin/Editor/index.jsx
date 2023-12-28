@@ -1,97 +1,136 @@
-import React from 'react';
-import { Table } from 'antd';
+import React, { useEffect, useState } from 'react';
+import {
+  EditOutlined,
+  PlusOutlined,
+  EyeOutlined,
+  DeleteOutlined,
+} from "@ant-design/icons";
+import { Button, Table } from 'antd';
+import userService from '../../../services/userService';
+import CreateOrEditUser from './createOrEdit';
+import notificationService from '../../../services/notificationService';
+import DeleteConfirmation from '../../../components/DeleteConfirmation';
 
-const columns = [
-  {
-    title: 'Name',
-    dataIndex: 'name',
-    filters: [
-      {
-        text: 'Joe',
-        value: 'Joe',
-      },
-      {
-        text: 'Jim',
-        value: 'Jim',
-      },
-      {
-        text: 'Submenu',
-        value: 'Submenu',
-        children: [
-          {
-            text: 'Green',
-            value: 'Green',
-          },
-          {
-            text: 'Black',
-            value: 'Black',
-          },
-        ],
-      },
-    ],
-    // specify the condition of filtering result
-    // here is that finding the name started with `value`
-    onFilter: (value, record) => record.name.indexOf(value) === 0,
-    sorter: (a, b) => a.name.length - b.name.length,
-    sortDirections: ['descend'],
-  },
-  {
-    title: 'Age',
-    dataIndex: 'age',
-    defaultSortOrder: 'descend',
-    sorter: (a, b) => a.age - b.age,
-  },
-  {
-    title: 'Address',
-    dataIndex: 'address',
-    filters: [
-      {
-        text: 'London',
-        value: 'London',
-      },
-      {
-        text: 'New York',
-        value: 'New York',
-      },
-    ],
-    onFilter: (value, record) => record.address.indexOf(value) === 0,
-  },
-];
-const data = [
-  {
-    key: '1',
-    name: 'John Brown',
-    age: 32,
-    address: 'New York No. 1 Lake Park',
-  },
-  {
-    key: '2',
-    name: 'Jim Green',
-    age: 42,
-    address: 'London No. 1 Lake Park',
-  },
-  {
-    key: '3',
-    name: 'Joe Black',
-    age: 32,
-    address: 'Sydney No. 1 Lake Park',
-  },
-  {
-    key: '4',
-    name: 'Jim Red',
-    age: 32,
-    address: 'London No. 2 Lake Park',
-  },
-];
+
 const onChange = (pagination, filters, sorter, extra) => {
   console.log('params', pagination, filters, sorter, extra);
 };
 
 
 function Editor() {
+  const [data, setData]= useState([])
+  const [editData, setEditData] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const showModal = (data) => {
+    data ? setEditData(data) : setEditData({})
+    setIsModalOpen(true);
+  };
+  
+  const onCancel = () => {
+    setIsModalOpen(false)
+  };
+
+  const getUsers = () => {
+    setLoading(true);
+    userService.getUsers()
+      .then((res) => {
+        console.log(res);
+        setData(res.data)
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => setLoading(false))
+  }
+
+  const deleteUser = (item) => {
+    userService.deleteUser(item._id)
+      .then((res) => {
+        const newData = data.filter((elt) => elt._id !== item._id);
+        setData(newData);
+        notificationService.messageSuccess("suppression effectuer")
+      })
+      .catch((err) => {
+        try { 
+          notificationService.notifyError(err.data.message);
+        } catch (error) {
+          notificationService.notifyError("Une erreur est survenue");
+        }
+      });
+  }
+
+  useEffect(() => {
+    getUsers()
+  }, [])
+  
+
+  const columns = [
+    {
+      title: 'Nom',
+      dataIndex: 'name',
+      key: 'name',
+      sorter: (a, b) => a.name.length - b.name.length,
+      sortDirections: ['descend'],
+    },
+    {
+      title: 'Email',
+      dataIndex: 'email',
+      key: 'email'
+      // defaultSortOrder: 'descend',
+      // sorter: (a, b) => a.age - b.age,
+    },
+    {
+      title: 'Role',
+      dataIndex: 'role',
+    },
+    {
+      title: 'Action',
+      key: 'action',
+      render: (_, record) => (
+        <div className="flex">
+          <Button
+            type={"text"}
+            // onClick={() => toggleModal(record)}
+            icon={<EyeOutlined />}
+          />
+          
+          <Button
+            type={"text"}
+            onClick={() => showModal(record)}
+            icon={<EditOutlined />}
+          />
+          
+          <DeleteConfirmation onConfirm={deleteUser} record={record}/>
+        </div>
+        )
+    }
+  ];
+  
     return (
         <>
-            <Table columns={columns} dataSource={data} onChange={onChange} />;
+          <div className={'flex justify-end'}>
+            <Button
+                className={'bg-sky-600 mb-5'}
+                type="primary"
+                icon={<PlusOutlined/>}
+                onClick={() => showModal()}
+            >
+                Ajouter
+            </Button>
+          </div>
+          <Table columns={columns} dataSource={data} onChange={onChange} loading={loading}/>;
+          {
+            isModalOpen && 
+            (<CreateOrEditUser 
+              isModalOpen={isModalOpen} 
+              onCancel = {onCancel} 
+              setData={setData}
+              oldData = {data}
+              editData={editData}
+              />)
+          }
         </>
     );
 } 
