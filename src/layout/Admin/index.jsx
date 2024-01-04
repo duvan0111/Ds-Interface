@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react';
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
-  UploadOutlined,
+  FileTextOutlined,
   UserOutlined,
-  VideoCameraOutlined,
+  AppstoreOutlined,
   LogoutOutlined
 } from '@ant-design/icons';
 import { Layout, Menu, Button, theme } from 'antd';
@@ -25,7 +25,7 @@ function LayoutAdmin() {
     useEffect(() => {
       const user = localstorageService.get(UTILS_APP.USER)
       if(!user){
-          navigate('/login')
+          navigate('/')
       }
       setUser(user)
   }, []);
@@ -41,7 +41,7 @@ function LayoutAdmin() {
                 items={[
                     {
                     key: '1',
-                    icon: <VideoCameraOutlined />,
+                    icon: <AppstoreOutlined />,
                     label: <NavLink to={'/admin/'}>Dashboard</NavLink>,
                     },
                     {
@@ -51,8 +51,13 @@ function LayoutAdmin() {
                     },
                     {
                     key: '3',
-                    icon: <UploadOutlined />,
+                    icon: <FileTextOutlined />,
                     label: <NavLink to={'/admin/post'}>Articles</NavLink>,
+                    },
+                    {
+                      key: '4',
+                      icon: <FileTextOutlined />,
+                      label: <NavLink to={'/admin/category'}>Catégories</NavLink>,
                     },
                 ]}
                 />
@@ -81,7 +86,7 @@ function LayoutAdmin() {
                 onClick={() => {
                   localstorageService.clear(UTILS_APP.USER);
                   localstorageService.clear(UTILS_APP.TOKEN);
-                  navigate("/login");
+                  navigate("/");
                 }}
                 className={'text-red-600 mt-6'}
               > 

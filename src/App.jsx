@@ -8,6 +8,9 @@ import Dashboard from "./pages/Admin/Dashboard"
 import PostAdmin from "./pages/Admin/Post"
 import Login from "./pages/Login"
 import Editor from "./pages/Admin/Editor"
+import CreatePost from "./pages/Admin/Post/create"
+import Category from "./pages/Admin/Category"
+import EditPost from "./pages/Admin/Post/edit"
 
 function App() {
 
@@ -21,7 +24,10 @@ function App() {
       <Route element={<LayoutAdmin />}>
         <Route path="/admin" element={<Dashboard />}/>
         <Route path="/admin/post" element={<PostAdmin />}/>
+        <Route path="/admin/post/new" element={<CreatePost />}/>
+        <Route path="/admin/post/edit/:id" element={<EditPost />}/>
         <Route path="/admin/editor" element={<Editor />}/>
+        <Route path="/admin/category" element={<Category />}/>
       </Route>
       <Route path="/login" element={<Login />}/>
     </Routes>

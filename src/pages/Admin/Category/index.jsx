@@ -9,6 +9,7 @@ import userService from '../../../services/userService';
 import CreateOrEditUser from './createOrEdit';
 import notificationService from '../../../services/notificationService';
 import DeleteConfirmation from '../../../components/DeleteConfirmation';
+import categoryService from '../../../services/categoryService';
 
 
 const onChange = (pagination, filters, sorter, extra) => {
@@ -16,7 +17,7 @@ const onChange = (pagination, filters, sorter, extra) => {
 };
 
 
-function Editor() {
+function Category() {
   const [data, setData]= useState([])
   const [editData, setEditData] = useState({});
   const [loading, setLoading] = useState(false);
@@ -31,9 +32,9 @@ function Editor() {
     setIsModalOpen(false)
   };
 
-  const getUsers = () => {
+  const getCategories = () => {
     setLoading(true);
-    userService.getUsers()
+    categoryService.getCategories()
       .then((res) => {
         console.log(res);
         setData(res.data)
@@ -45,7 +46,7 @@ function Editor() {
   }
 
   const deleteUser = (item) => {
-    userService.deleteUser(item._id)
+    categoryService.deleteCategory(item._id)
       .then((res) => {
         const newData = data.filter((elt) => elt._id !== item._id);
         setData(newData);
@@ -61,7 +62,7 @@ function Editor() {
   }
 
   useEffect(() => {
-    getUsers()
+    getCategories()
   }, [])
   
 
@@ -74,19 +75,11 @@ function Editor() {
       sortDirections: ['descend'],
     },
     {
-      title: 'Email',
-      dataIndex: 'email',
-      key: 'email'
+      title: 'Description',
+      dataIndex: 'description',
+      key: 'description'
       // defaultSortOrder: 'descend',
       // sorter: (a, b) => a.age - b.age,
-    },
-    {
-      title: 'Role',
-      dataIndex: 'role',
-    },
-    {
-      title: 'Nombres d\'articles',
-      dataIndex: '',
     },
     {
       title: 'Action',
@@ -139,4 +132,4 @@ function Editor() {
 } 
 
 
-export default Editor
+export default Category

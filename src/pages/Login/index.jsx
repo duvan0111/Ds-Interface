@@ -39,13 +39,14 @@ const Login = () => {
   return (
     <>
         <div className='flex justify-center items-center h-screen'>
-            <div>
+            <div className='sm:w-6/12' style={{ border: '1px solid gray', padding: 20, borderRadius: 20, boxShadow: '0px 0px 40px #888888' }}>
+                <h1 className={'text-sky-600 text-center text-4xl mb-11'}>Connexion</h1>
                 <Form
                     name="normal_login"
-                    labelCol={{ span: 8 }}
-                    wrapperCol={{ span: 16 }}
-                    style={{ minWidth: 600}}
-                    className="login-form "
+                    // labelCol={{ span: 16 }}
+                    // wrapperCol={{ span: 24 }}
+                    // style={{ maxWidth: 500}}
+                    className="login-form"
                     initialValues={{
                         remember: true,
                     }}
@@ -94,12 +95,14 @@ const Login = () => {
                             htmlType="submit" 
                             className="login-form-button bg-sky-600" 
                             loading={loader}>
-                            Log in
+                            connecter
                         </Button>
                         {/* Or <a href="">register now!</a> */}
                     </Form.Item>
-                </Form>
+                </Form>    
             </div>
+                
+            
         </div>
     </>
   );
