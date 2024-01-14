@@ -8,7 +8,7 @@ import notificationService from "../../../services/notificationService";
 import categoryService from "../../../services/categoryService";
 import userService from "../../../services/userService";
 import postService from "../../../services/postService";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 const { Title } = Typography
 const { TextArea } = Input
@@ -21,12 +21,14 @@ const handleChange = (value) => {
 
 function EditPost() {
     const { id } = useParams()
+    const { state : { post }} = useLocation()
     const [form] = Form.useForm()
     const [loader, setLoader] = useState(false);
     const editorRef = useRef(null);
-    const [post, setPost] = useState({})
+    // const [post, setPost] = useState({})
     const [categories, setCategories] = useState([])
     const [users, setUsers] = useState([])
+    const [test, setTest] = useState(null)
     const options = [];
     const navigate = useNavigate()
 
@@ -52,9 +54,8 @@ function EditPost() {
     const getPost = () => {
         postService.getPost(id)
             .then((res) => {
-                console.log(res.data);
-                setPost(res.data)
-                console.log(post.title);
+                // setPost(res.data)
+                // console.log(post);
             })
             .catch((err) => {
                 console.log(err);
@@ -62,10 +63,10 @@ function EditPost() {
     } 
 
     useEffect(() => {
-        getPost()
+        getPost();
         getCategories()
         getUsers()
-    }, [])
+    }, []);
 
     users.map((item) => {
         options.push({
@@ -82,9 +83,9 @@ function EditPost() {
         console.log(data);
 
         setLoader(true);
-        postService.postPost(data)
+        postService.updatePost(id, data)
         .then((res) => {
-            notificationService.messageSuccess("Editeur ajouté avec succès ")
+            notificationService.messageSuccess("Editeur modifié avec succès ")
             form.resetFields();
             navigate('/admin/post')
         })
@@ -102,6 +103,7 @@ function EditPost() {
 
     return (
         <>
+        {/* {console.log(post)} */}
             <section>
                 <Title><span className="text-sky-600">Modifier Article</span></Title>
 
@@ -111,9 +113,13 @@ function EditPost() {
                 name="control-hooks"
                 onFinish={onFinish}
                 initialValues={{
-                    title : post.title,
-                    resume: post.resume,
-                    status: post.status,
+                    title : post?.title,
+                    resume: post?.resume,
+                    status: post?.status,
+                    category: post?.category[0]._id,
+                    users : post?.users.map((item) => {
+                        return item._id
+                    })
 
                 }}
             >

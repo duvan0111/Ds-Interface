@@ -121,13 +121,13 @@ function PostAdmin() {
         <div className="flex">
           <Button
             type={"text"}
-            // onClick={() => toggleModal(record)}
+            onClick={() => navigate(`/post/${record._id}`, { state : {post : record }})}
             icon={<EyeOutlined />}
           />
           
           <Button
             type={"text"}
-            onClick={() => navigate(`/admin/post/edit/${record._id}`)}
+            onClick={() => navigate(`/admin/post/edit/${record._id}`, { state : {post : record }})}
             icon={<EditOutlined />}
           />
           
@@ -149,7 +149,14 @@ function PostAdmin() {
             Ajouter
         </Button>
       </div>
-      <Table columns={columns} dataSource={data} onChange={onChange} loading={loading}/>;
+      <Table 
+        columns={columns} 
+        dataSource={data} 
+        onChange={onChange} 
+        loading={loading}
+        className='overflow-x-auto'
+      />;
+      
     </>
     );
 } 

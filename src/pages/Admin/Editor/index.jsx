@@ -123,7 +123,13 @@ function Editor() {
                 Ajouter
             </Button>
           </div>
-          <Table columns={columns} dataSource={data} onChange={onChange} loading={loading}/>;
+          <Table 
+            columns={columns} 
+            dataSource={data} 
+            onChange={onChange} 
+            loading={loading}
+            className='overflow-x-auto'
+            />;
           {
             isModalOpen && 
             (<CreateOrEditUser 
