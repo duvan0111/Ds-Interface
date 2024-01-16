@@ -5,7 +5,8 @@ import {
   FileTextOutlined,
   UserOutlined,
   AppstoreOutlined,
-  LogoutOutlined
+  LogoutOutlined,
+  GoldOutlined
 } from '@ant-design/icons';
 import { Layout, Menu, Button, theme } from 'antd';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
@@ -27,7 +28,7 @@ function LayoutAdmin() {
       if(!user){
           navigate('/')
       }
-      setUser(user)
+      setUser(user)      
   }, []);
 
     return (
@@ -44,21 +45,21 @@ function LayoutAdmin() {
                     icon: <AppstoreOutlined />,
                     label: <NavLink to={'/admin/'}>Dashboard</NavLink>,
                     },
-                    {
-                    key: '2',
-                    icon: <UserOutlined />,
-                    label: <NavLink to={'/admin/editor'}>Editeurs</NavLink>,
-                    },
+                    user?.role == UTILS_APP.ROLES.ADMIN ? ({
+                      key: '2',
+                      icon: <UserOutlined />,
+                      label: <NavLink to={'/admin/editor'}>Editeurs</NavLink>,
+                      }) : null,
                     {
                     key: '3',
                     icon: <FileTextOutlined />,
                     label: <NavLink to={'/admin/post'}>Articles</NavLink>,
                     },
-                    {
+                    user?.role == UTILS_APP.ROLES.ADMIN ? ({
                       key: '4',
-                      icon: <FileTextOutlined />,
+                      icon: <GoldOutlined />,
                       label: <NavLink to={'/admin/category'}>Catégories</NavLink>,
-                    },
+                    }) : null
                 ]}
                 />
             </Sider>

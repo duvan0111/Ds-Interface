@@ -7,6 +7,9 @@ class UserService{
     getUsers(){
         return axios.get(getServerUrl()+`/api/user`)
     }
+    getUserPost(id){
+        return axios.get(getServerUrl()+`/api/user/${id}`)
+    }
     postUser(data){
         return axios.post(getServerUrl()+`/api/user/signup`, data)
     }

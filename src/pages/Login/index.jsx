@@ -20,7 +20,7 @@ const Login = () => {
         const { data } = res;
         
         localstorageService.set(UTILS_APP.TOKEN, data.token);
-        localstorageService.set(UTILS_APP.USER, data.userId);
+        localstorageService.set(UTILS_APP.USER, data.user);
         
         navigate('/admin')
     })

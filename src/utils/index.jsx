@@ -29,3 +29,14 @@ export const GESTION_COLOR_AVATAR = [
     "#96f56",
     "#e56f49",
 ]
+
+export const GESTION_ROLE = {
+    admin : "admin",
+    editeur: "editeur"
+}
+
+export const GESTION_COLOR_TAG = {
+    "TERMINER" : "green",
+    "PUBLIER"  : "gold",
+    "EN COURS" :"geekblue"
+}

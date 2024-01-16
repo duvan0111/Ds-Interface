@@ -204,7 +204,7 @@ function CreatePost() {
                     label={<span className="text-sky-700 font-bold">Contenu :</span>}                    
                 >
                 <Editor
-                    apiKey='tkpf3tvj9pe9bq9qfd4huak7hojg92ks8en2tcgx0nqmimkq'
+                    apiKey='3kk9ma3rud24ldkfshg24arsztxsp7eh74ztx6g2umi42314'
                     onInit={(evt, editor) => editorRef.current = editor}
                     initialValue={"<p>Rediger le contenu de l'article ici !!!</p>"}
                     init={{

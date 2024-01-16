@@ -6,9 +6,8 @@ export const UTILS_APP = {
     TOKEN: "token",
     USER: "user",
     ROLES: {
-        ADMIN: "ADMIN",
-        SALES_MANAGER: "SALES_MANAGER",
-        SALES: "SALES"
+        ADMIN: "admin",
+        EDITEUR: "editeur",
     },
     MODAL_DEFAULT_SIZE: 700,
     DEFAULT_PAGE_SIZE: 100,
@@ -34,10 +33,8 @@ export const UTILS_APP = {
 class LocalstorageService {
     encode = (key) => btoa(UTILS_APP.APP_NAME + "_" + key);
     set = (key, value) =>
-        // localStorage.setItem(key, value)
         secureLocalStorage.setItem(this.encode(key), JSON.stringify(value));
-        // sessionStorage.setItem(key, value)
-
+        
     get = (key) =>
         secureLocalStorage.getItem(this.encode(key))
             ? JSON.parse(secureLocalStorage.getItem(this.encode(key)))
